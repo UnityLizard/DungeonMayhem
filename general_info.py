@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Holy Grail Quest')
 
 #define fonts
-font = pygame.font.SysFont('Times New Roman', 14)
+font = pygame.font.SysFont('Comic Sans', 12)
 
 #define colours
 red = (255, 0, 0)

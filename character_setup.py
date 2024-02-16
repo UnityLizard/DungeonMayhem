@@ -20,8 +20,8 @@ stats = {
 
 # x and y used to position the characters
 floor_line = 460
-knights_posotion = 70
-enemies_posotion = 550
+knights_posotion = 40
+enemies_posotion = 520
 distance_between_characters = 20
 
 def characters_setup(character_names : list, are_knights : bool):
