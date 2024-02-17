@@ -1,5 +1,5 @@
 import random
-import time
+import button
 
 from character import *
 from level_setup import Level
@@ -17,6 +17,7 @@ is_attack_selected = False
 is_clicked = False
 has_taken_action = False
 target = None
+potion_effect = 20
 
 #works like queue to track order
 turn_order = knights + enemies
@@ -25,6 +26,9 @@ curr_character = None
 
 is_running = True
 is_win = False
+
+#create buttons
+potion_button = button.Button(screen, 100, screen_height - bottom_panel + 70, img_potion, 64, 64)
 
 while is_running:
 
@@ -39,10 +43,12 @@ while is_running:
     for enemy in enemies:
         enemy.draw()
 
-
     if not curr_character:
         curr_character = turn_order.pop(0)
 
+    is_attack_selected = False
+    is_potion_selected = False
+    target = None
     pygame.mouse.set_visible(True)
     pos = pygame.mouse.get_pos()
 
@@ -56,6 +62,9 @@ while is_running:
                 is_attack_selected = True
                 target = enemy
 
+    if potion_button.draw():
+        is_potion_selected = True
+
     #attack action
     action_cooldown += 1
     if action_cooldown >= action_wait_time:
@@ -64,7 +73,9 @@ while is_running:
                 if curr_character.attack(target):
                     turn_order.remove(target)
                     enemies.remove(target)
-                target = None
+                has_taken_action = True
+            if is_potion_selected:
+                curr_character.hp = min(curr_character.hp + potion_effect, curr_character.max_hp)
                 has_taken_action = True
         else:
             enemy_target =  random.choice(knights)

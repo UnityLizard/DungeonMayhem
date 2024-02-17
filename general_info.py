@@ -35,6 +35,9 @@ img_sword = pygame.image.load('img/icons/sword.png').convert_alpha()
 #panel image
 img_panel = pygame.image.load('img/panel/panel.png').convert_alpha()
 
+#sword cursor image
+img_potion = pygame.image.load('img/icons/potion.png').convert_alpha()
+
 #drawing panel
 def draw_panel():
     screen.blit(img_panel, (0, screen_height - bottom_panel))
