@@ -1,5 +1,4 @@
 import random
-import button
 
 from character import *
 from level_setup import Level
@@ -8,11 +7,11 @@ from character_setup import *
 #game variables
 level = Level()
 level.setup_level(1)
-knights = characters_setup(["robin", "galahad", "lancelot", "bedevere", "king_arthur"], True)
-enemies = characters_setup(level.enemies, False)
+knights = knights_setup(["robin", "galahad", "lancelot", "bedevere", "king_arthur"])
+enemies = enemies_setup(level.enemies)
 
 action_cooldown = 0
-action_wait_time = 10
+action_wait_time = 5
 is_attack_selected = False
 is_clicked = False
 has_taken_action = False
@@ -26,12 +25,6 @@ curr_character = None
 
 is_running = True
 is_win = False
-
-#create buttons
-def_attack_button = button.Button(screen, 10, screen_height - bottom_panel + 10, img_def_attack, 400, 80)
-attack2_button = button.Button(screen, 10, screen_height - bottom_panel + 110, img_def_attack, 400, 80)
-attack3_button = button.Button(screen, 510, screen_height - bottom_panel + 10, img_def_attack, 400, 80)
-attack4_button = button.Button(screen, 510, screen_height - bottom_panel + 110, img_def_attack, 400, 80)
 
 while is_running:
 
@@ -49,6 +42,9 @@ while is_running:
     if not curr_character:
         curr_character = turn_order.pop(0)
 
+    if isinstance(curr_character, Knight):
+        curr_character.draw_abilities()
+
     is_attack_selected = False
     is_potion_selected = False
     target = None
@@ -64,15 +60,6 @@ while is_running:
             if is_clicked:
                 is_attack_selected = True
                 target = enemy
-
-    if def_attack_button.draw():
-        is_potion_selected = True
-    if attack2_button.draw():
-        is_potion_selected = True
-    if attack3_button.draw():
-        is_potion_selected = True
-    if attack4_button.draw():
-        is_potion_selected = True
 
     #attack action
     action_cooldown += 1
@@ -119,7 +106,7 @@ while is_running:
         else:
             level.curr_level += 1
             level.setup_level(level.curr_level)
-            enemies = characters_setup(level.enemies, False)
+            enemies = enemies_setup(level.enemies)
             turn_order = turn_order + enemies
             random.shuffle(turn_order)
 

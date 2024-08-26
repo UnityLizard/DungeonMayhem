@@ -2,7 +2,7 @@ import random
 
 from general_info import *
 
-#fighter class
+#character class
 class Character():
 	def __init__(self, x, y, name, max_hp, strength):
 		self.name = name

@@ -1,13 +1,31 @@
-from character import *
+from knight import *
+from enemy import *
 
 #here are the stats for all characters : first - HP, second - damage
-stats = {
-    "king_arthur" : (50, 10),
-    "bedevere" : (50, 10),
-    "lancelot" : (50, 10),
-    "galahad" : (50, 10),
-    "robin" : (50, 10),
+abilities = {
+    "normal_attack" : (Ability("normal_attack", 0, 10, 10, img_def_attack, 400, 80)),
+    "multi_attack" : (Ability("multi_attack", 2, 10, 110, img_multi_attack, 400, 80)),
+    "stun" : (Ability("stun", 4, 510, 10, img_stun_attack, 400, 80)),
+    "heal" : (Ability("heal", 3, 10, 110, img_heal, 400, 80)),
+    "multi_heal" : (Ability("multi_heal", 5, 510, 10, img_multi_heal, 400, 80)),
+    "taunt" : (Ability("taunt", 3, 10, 110, img_taunt, 400, 80)),
+    "dodge" : (Ability("dodge", 4, 510, 10, img_dodge, 400, 80)),
+}
 
+stats_knights = {
+    "king_arthur" : (50, 10,
+                     {abilities["normal_attack"], abilities["multi_attack"], abilities["dodge"]}),
+    "bedevere" : (50, 10,
+                  {abilities["normal_attack"], abilities["taunt"], abilities["stun"]}),
+    "lancelot" : (50, 10,
+                  {abilities["normal_attack"], abilities["multi_attack"], abilities["stun"]}),
+    "galahad" : (50, 10,
+                 {abilities["normal_attack"], abilities["heal"], abilities["multi_heal"]}),
+    "robin" : (50, 10,
+               {abilities["normal_attack"], abilities["multi_attack"], abilities["dodge"]}),
+}
+
+stats_enemies = {
     "french" : (25, 6),
     "ni_knight_small" : (20, 10),
     "ni_knight_big" : (50, 10),
@@ -24,12 +42,22 @@ knights_posotion = 40
 enemies_posotion = 520
 distance_between_characters = 20
 
-def characters_setup(character_names : list, are_knights : bool):
-    position = knights_posotion if are_knights else enemies_posotion
-    characters = []
+def knights_setup(character_names : list):
+    position = knights_posotion
+    characters: list[Character] = []
 
     for name in character_names:
-        characters.append(Character(position, floor_line, name, stats[name][0], stats[name][1]))
+        characters.append(Knight(position, floor_line, name, stats_knights[name][0], stats_knights[name][1], stats_knights[name][2]))
+        position += distance_between_characters + characters[-1].rect.width
+
+    return characters
+
+def enemies_setup(character_names : list):
+    position = enemies_posotion
+    characters: list[Character] = []
+
+    for name in character_names:     
+        characters.append(Character(position, floor_line, name, stats_enemies[name][0], stats_enemies[name][1]))
         position += distance_between_characters + characters[-1].rect.width
 
     return characters
