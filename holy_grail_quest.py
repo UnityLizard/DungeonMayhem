@@ -28,7 +28,10 @@ is_running = True
 is_win = False
 
 #create buttons
-potion_button = button.Button(screen, 100, screen_height - bottom_panel + 70, img_potion, 64, 64)
+def_attack_button = button.Button(screen, 10, screen_height - bottom_panel + 10, img_def_attack, 400, 80)
+attack2_button = button.Button(screen, 10, screen_height - bottom_panel + 110, img_def_attack, 400, 80)
+attack3_button = button.Button(screen, 510, screen_height - bottom_panel + 10, img_def_attack, 400, 80)
+attack4_button = button.Button(screen, 510, screen_height - bottom_panel + 110, img_def_attack, 400, 80)
 
 while is_running:
 
@@ -62,7 +65,13 @@ while is_running:
                 is_attack_selected = True
                 target = enemy
 
-    if potion_button.draw():
+    if def_attack_button.draw():
+        is_potion_selected = True
+    if attack2_button.draw():
+        is_potion_selected = True
+    if attack3_button.draw():
+        is_potion_selected = True
+    if attack4_button.draw():
         is_potion_selected = True
 
     #attack action
