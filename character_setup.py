@@ -3,13 +3,13 @@ from enemy import *
 
 #here are the stats for all characters : first - HP, second - damage
 abilities = {
-    "normal_attack" : (Ability("normal_attack", 0, 10, 10, img_def_attack, 400, 80)),
-    "multi_attack" : (Ability("multi_attack", 2, 10, 110, img_multi_attack, 400, 80)),
-    "stun" : (Ability("stun", 4, 510, 10, img_stun_attack, 400, 80)),
-    "heal" : (Ability("heal", 3, 10, 110, img_heal, 400, 80)),
-    "multi_heal" : (Ability("multi_heal", 5, 510, 10, img_multi_heal, 400, 80)),
-    "taunt" : (Ability("taunt", 3, 10, 110, img_taunt, 400, 80)),
-    "dodge" : (Ability("dodge", 4, 510, 10, img_dodge, 400, 80)),
+    "normal_attack" : (Ability("normal_attack", 0, 15, 15, img_def_attack, 380, 80)),
+    "multi_attack" : (Ability("multi_attack", 2, 15, 105, img_multi_attack, 380, 80)),
+    "stun" : (Ability("stun", 4, 515, 15, img_stun_attack, 380, 80)),
+    "heal" : (Ability("heal", 3, 15, 105, img_heal, 380, 80)),
+    "multi_heal" : (Ability("multi_heal", 5, 515, 15, img_multi_heal, 380, 80)),
+    "taunt" : (Ability("taunt", 3, 15, 105, img_taunt, 380, 80)),
+    "dodge" : (Ability("dodge", 4, 515, 15, img_dodge, 380, 80)),
 }
 
 stats_knights = {
@@ -22,7 +22,7 @@ stats_knights = {
     "galahad" : (50, 10,
                  {abilities["normal_attack"], abilities["heal"], abilities["multi_heal"]}),
     "robin" : (50, 10,
-               {abilities["normal_attack"], abilities["multi_attack"], abilities["dodge"]}),
+               {abilities["normal_attack"], abilities["heal"], abilities["dodge"]}),
 }
 
 stats_enemies = {

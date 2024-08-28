@@ -55,8 +55,6 @@ while is_running:
         if enemy.rect.collidepoint(pos):
             #hide mouse
             pygame.mouse.set_visible(False)
-			#show sword in place of mouse cursor
-            screen.blit(img_sword, pos)
             if is_clicked:
                 is_attack_selected = True
                 target = enemy

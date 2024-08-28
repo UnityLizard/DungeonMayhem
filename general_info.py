@@ -29,9 +29,6 @@ def draw_text(text, font, color, x, y):
     rect.center = (x, y)
     screen.blit(surface, rect)
 
-#sword cursor image
-img_sword = pygame.image.load('img/icons/sword.png').convert_alpha()
-
 #panel image
 img_panel = pygame.image.load('img/panel/panel.png').convert_alpha()
 
