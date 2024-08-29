@@ -18,19 +18,19 @@ image_cnt_5 = pygame.transform.scale(img_cd_5, (80, 80))
 #bag class
 class Bag():
     def __init__(self, att_pot_cnt, heal_pot_cnt, inv_pot_cnt):
-        self.bIsOpen = False
+        self.is_open = False
         self.att_pot_cnt = att_pot_cnt
         self.heal_pot_cnt = heal_pot_cnt
         self.inv_pot_cnt = inv_pot_cnt
 
-    def is_open(self):
-        return self.bIsOpen
+    def is_opened(self):
+        return self.is_open
 
     def open(self):
-        self.bIsOpen = True
+        self.is_open = True
 
     def close(self):
-        self.bIsOpen = False
+        self.is_open = False
 
     def use_att_pot(self):
         self.att_pot_cnt -= 1
@@ -42,7 +42,7 @@ class Bag():
         self.inv_pot_cnt -= 1
 
     def draw(self):
-        if (self.bIsOpen):
+        if (self.is_open):
             back_button.draw()
             if (self.att_pot_cnt):
                 attack_potion_button.draw()

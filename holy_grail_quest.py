@@ -13,7 +13,7 @@ enemies = enemies_setup(level.enemies)
 bag = Bag(3, 5, 1)
 
 action_cooldown = 0
-action_wait_time = 6
+action_wait_time = 12
 is_attack_selected = False
 is_clicked = False
 has_taken_action = False
@@ -44,7 +44,7 @@ while is_running:
         curr_character = turn_order.pop(0)
 
     if isinstance(curr_character, Knight):
-        if not bag.is_open():
+        if not bag.is_opened():
             curr_character.draw_abilities()
         bag.draw()
 
@@ -59,6 +59,13 @@ while is_running:
             if is_clicked:
                 is_attack_selected = True
                 target = enemy
+
+    if bag.is_opened():
+        if back_button.is_clicked():
+            bag.close()
+    else:
+        if bag_button.is_clicked():
+            bag.open()
 
     #attack action
     action_cooldown += 1
