@@ -1,7 +1,7 @@
 from knight import *
 from enemy import *
 
-#here are the stats for all characters : first - HP, second - damage
+
 abilities = {
     "normal_attack" : (Ability("normal_attack", 0, 15, 15, img_def_attack, 380, 80)),
     "multi_attack" : (Ability("multi_attack", 2, 15, 105, img_multi_attack, 380, 80)),
@@ -12,6 +12,7 @@ abilities = {
     "dodge" : (Ability("dodge", 4, 515, 15, img_dodge, 380, 80)),
 }
 
+#here are the stats for all characters : first - HP, second - damage, third - abilities
 stats_knights = {
     "king_arthur" : (50, 10,
                      {abilities["normal_attack"], abilities["multi_attack"], abilities["dodge"]}),

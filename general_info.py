@@ -50,6 +50,8 @@ img_cd_0 = pygame.image.load('img/icons/cd_0.png').convert_alpha()
 img_cd_1 = pygame.image.load('img/icons/cd_1.png').convert_alpha()
 img_cd_2 = pygame.image.load('img/icons/cd_2.png').convert_alpha()
 img_cd_3 = pygame.image.load('img/icons/cd_3.png').convert_alpha()
+img_cd_4 = pygame.image.load('img/icons/cd_4.png').convert_alpha()
+img_cd_5 = pygame.image.load('img/icons/cd_5.png').convert_alpha()
 
 #drawing panel
 def draw_panel():

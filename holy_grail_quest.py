@@ -3,20 +3,21 @@ import random
 from character import *
 from level_setup import Level
 from character_setup import *
+from bag import *
 
 #game variables
 level = Level()
 level.setup_level(1)
 knights = knights_setup(["robin", "galahad", "lancelot", "bedevere", "king_arthur"])
 enemies = enemies_setup(level.enemies)
+bag = Bag(3, 5, 1)
 
 action_cooldown = 0
-action_wait_time = 5
+action_wait_time = 6
 is_attack_selected = False
 is_clicked = False
 has_taken_action = False
 target = None
-potion_effect = 20
 
 #works like queue to track order
 turn_order = knights + enemies
@@ -43,7 +44,9 @@ while is_running:
         curr_character = turn_order.pop(0)
 
     if isinstance(curr_character, Knight):
-        curr_character.draw_abilities()
+        if not bag.is_open():
+            curr_character.draw_abilities()
+        bag.draw()
 
     is_attack_selected = False
     is_potion_selected = False
@@ -53,8 +56,6 @@ while is_running:
 
     for enemy in enemies:
         if enemy.rect.collidepoint(pos):
-            #hide mouse
-            pygame.mouse.set_visible(False)
             if is_clicked:
                 is_attack_selected = True
                 target = enemy
