@@ -9,10 +9,16 @@ class Character():
 		self.name = name
 		self.max_hp = max_hp
 		self.hp = max_hp
+		self.ratio = 1
+		self.ratio_duration = 0
 		self.strength = strength
 		self.is_stunned = False
 		self.has_taunt = False
+		self.taunt_duration = 0
 		self.has_dodge = False
+		self.dodge_duration = 0
+		self.has_invincibility = False
+		self.invincibility_duration = 0
 		self.alive = True
 		self.position = (x, y)
 		self.image = pygame.image.load(f'img/characters/{self.name}.png')
@@ -21,7 +27,12 @@ class Character():
 	def attack(self, target, ratio):
 		#deal damage to enemy
 		rand = random.randint(-5, 5)
-		damage = math.floor(ratio * (self.strength + rand))
+		damage = self.ratio * math.floor(ratio * (self.strength + rand))
+		#dodge is 50% to miss the attack and invincibility is 100%
+		if target.has_invincibility:
+			return False
+		if target.has_dodge and random.randint(0, 1):
+			return False
 		target.hp -= damage
 		#check if target has died
 		if target.hp < 1:
@@ -42,14 +53,44 @@ class Character():
 
 	def taunt(self):
 		self.has_taunt = True
+		self.taunt_duration = 2
 
 	def dodge(self):
 		self.has_dodge = True
+		self.dodge_duration = 3
+
+	def invincibility(self):
+		self.has_invincibility = True
+		self.invincibility_duration = 4
+
+	def increase_ratio(self):
+		self.ratio = self.ratio + 1
+		self.ratio_duration = 4
+
+	def is_taunting(self):
+		return self.has_taunt
+
+	def stunned(self):
+		return self.is_stunned
 
 	def pass_turn(self):
 		self.is_stunned = False
-		self.has_taunt = False
-		self.has_dodge = False
+		
+		self.taunt_duration = max(0, self.taunt_duration - 1)
+		if not self.taunt_duration:
+			self.has_taunt = False
+
+		self.dodge_duration = max(0, self.dodge_duration - 1)
+		if not self.dodge_duration:
+			self.has_dodge = False
+
+		self.invincibility_duration = max(0, self.invincibility_duration - 1)
+		if not self.invincibility_duration:
+			self.has_invincibility = False
+
+		self.ratio_duration = max(0, self.ratio_duration - 1)
+		if not self.ratio_duration:
+			self.ratio = 1
 
 	def draw(self):
 		screen.blit(self.image, self.rect)

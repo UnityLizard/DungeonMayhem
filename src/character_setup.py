@@ -1,4 +1,4 @@
-from ability_type import *
+from ability import *
 from enemy import *
 from knight import *
 

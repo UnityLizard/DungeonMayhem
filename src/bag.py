@@ -32,12 +32,21 @@ class Bag():
     def close(self):
         self.is_open = False
 
+    def get_att_pot_cnt(self):
+        return self.att_pot_cnt
+
     def use_att_pot(self):
         self.att_pot_cnt -= 1
 
+    def get_heal_pot_cnt(self):
+        return self.heal_pot_cnt
+    
     def use_heal_pot(self):
         self.heal_pot_cnt -= 1
 
+    def get_inv_pot_cnt(self):
+        return self.inv_pot_cnt
+    
     def use_inv_pot(self):
         self.inv_pot_cnt -= 1
 

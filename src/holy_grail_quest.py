@@ -15,6 +15,7 @@ bag = Bag(3, 5, 1)
 action_cooldown = 0
 action_wait_time = 12
 ability_selected = None
+item_selected = None
 target = None
 is_clicked = False
 is_new_action = False
@@ -59,19 +60,49 @@ while is_running:
         for ability in curr_character.abilities:
             if ability.is_activated() and not ability.is_on_cd() and not bag.is_opened():
                 ability_selected = ability
+                item_selected = None
 
-        if ability_selected:
+        if bag.is_opened() and attack_potion_button.is_clicked() and bag.get_att_pot_cnt() != 0:
+            ability_selected = None
+            item_selected = "attack_potion"
+        elif bag.is_opened() and heal_potion_button.is_clicked() and bag.get_heal_pot_cnt() != 0:
+            ability_selected = None
+            item_selected = "heal_potion"
+        elif bag.is_opened() and invincibility_potion_button.is_clicked() and bag.get_inv_pot_cnt() != 0:
+            ability_selected = None
+            item_selected = "invincibility_potion"
+
+        if ability_selected and ability_selected.get_type() == AbilityType.OFFENCE:
             pos = pygame.mouse.get_pos()
             for enemy in enemies:
                 if enemy.rect.collidepoint(pos) and is_clicked:
                     target = enemy
+
+        if ability_selected and ability_selected.get_type() == AbilityType.DEFENCE:
+            pos = pygame.mouse.get_pos()
+            for knight in knights:
+                if knight.rect.collidepoint(pos) and is_clicked:
+                    target = knight
+
+        if ability_selected and ability_selected.get_type() == AbilityType.UTILITY:
+            pos = pygame.mouse.get_pos()
+            if curr_character.rect.collidepoint(pos) and is_clicked:
+                target = curr_character
+
+        if item_selected:
+            pos = pygame.mouse.get_pos()
+            if curr_character.rect.collidepoint(pos) and is_clicked:
+                target = curr_character
 
     # attack action
     action_cooldown += 1
     if action_cooldown >= action_wait_time:
         died = []
         if isinstance(curr_character, Knight):
-            if ability_selected and target:
+            if curr_character.stunned():
+                has_taken_action = True
+                curr_character.pass_turn()
+            elif ability_selected and target:
                 if ability_selected.get_name() == "normal_attack":
                     if curr_character.attack(target, 1):
                         died.append(target)
@@ -95,11 +126,32 @@ while is_running:
                 has_taken_action = True
                 ability_selected.set_on_cd()
                 curr_character.pass_turn()
+            elif item_selected and target:
+                if item_selected == "attack_potion":
+                    bag.use_att_pot()
+                elif item_selected == "heal_potion":
+                    bag.use_heal_pot()
+                    curr_character.heal_pot()
+                elif item_selected == "invincibility_potion":
+                    bag.use_inv_pot()
+                has_taken_action = True
+                curr_character.pass_turn()
         else:
-            enemy_target =  random.choice(knights)
-            if curr_character.attack(enemy_target, 1):
-                died.append(enemy_target)
-            has_taken_action = True
+            if curr_character.stunned():
+                has_taken_action = True
+                curr_character.pass_turn()
+            else:
+                enemy_target = None
+                for knight in knights:
+                    if knight.is_taunting():
+                        enemy_target = knight
+                        break
+                if not enemy_target:
+                    enemy_target = random.choice(knights)
+                if curr_character.attack(enemy_target, 1):
+                    died.append(enemy_target)
+                has_taken_action = True
+                curr_character.pass_turn()
         
         for character in died:
             turn_order.remove(character)
@@ -114,9 +166,11 @@ while is_running:
         turn_order.append(curr_character)
         curr_character = None
         ability_selected = None
+        item_selected = None
         target = None
         is_clicked = False
         has_taken_action = False
+        bag.close()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

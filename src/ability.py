@@ -1,6 +1,12 @@
 import button
+from enum import Enum
 
 from general_info import *
+
+class AbilityType(Enum):
+    OFFENCE = 1
+    DEFENCE = 2
+    UTILITY = 3
 
 #ablity class
 class Ability():

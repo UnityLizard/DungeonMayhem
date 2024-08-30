@@ -16,8 +16,10 @@ class Knight(Character):
         for ability in self.abilities:
             ability.reduce_cd()
 
+    def heal_pot(self):
+        self.hp = min(self.hp + 30, self.max_hp)
+
     def draw_abilities(self):
         for ability in self.abilities:
             ability.draw()
 
-    # def activate_ability(self)
