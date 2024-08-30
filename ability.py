@@ -20,6 +20,9 @@ class Ability():
         self.ability_button.draw()
         self.cd_buttons[self.curr_cd].draw()
 
+    def is_activated(self):
+        return self.ability_button.is_clicked()
+
     def activate(self):
         self.cd = self.max_cd
         return self.name

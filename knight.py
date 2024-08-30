@@ -12,3 +12,5 @@ class Knight(Character):
     def draw_abilities(self):
         for ability in self.abilities:
             ability.draw()
+
+    # def activate_ability(self)

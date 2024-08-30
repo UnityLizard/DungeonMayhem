@@ -14,10 +14,11 @@ bag = Bag(3, 5, 1)
 
 action_cooldown = 0
 action_wait_time = 12
-is_attack_selected = False
-is_clicked = False
-has_taken_action = False
+ability_selected = None
 target = None
+is_clicked = False
+is_new_action = False
+has_taken_action = False
 
 #works like queue to track order
 turn_order = knights + enemies
@@ -43,42 +44,41 @@ while is_running:
     if not curr_character:
         curr_character = turn_order.pop(0)
 
+    pos = pygame.mouse.get_pos()
+
     if isinstance(curr_character, Knight):
         if not bag.is_opened():
             curr_character.draw_abilities()
         bag.draw()
 
-    is_attack_selected = False
-    is_potion_selected = False
-    target = None
-    pygame.mouse.set_visible(True)
-    pos = pygame.mouse.get_pos()
-
-    for enemy in enemies:
-        if enemy.rect.collidepoint(pos):
-            if is_clicked:
-                is_attack_selected = True
-                target = enemy
-
-    if bag.is_opened():
-        if back_button.is_clicked():
+        if bag.is_opened() and back_button.is_clicked() and is_new_action:
+            is_new_action = False
             bag.close()
-    else:
-        if bag_button.is_clicked():
+        elif not bag.is_opened() and bag_button.is_clicked() and is_new_action:
+            is_new_action = False
             bag.open()
 
+        for ability in curr_character.abilities:
+            if ability.is_activated():
+                ability_selected = ability
+
+        if ability_selected:
+            for enemy in enemies:
+                if enemy.rect.collidepoint(pos) and is_clicked:
+                    target = enemy
+
     #attack action
-    action_cooldown += 1
-    if action_cooldown >= action_wait_time:
+    # action_cooldown += 1
+    if 12 >= action_wait_time:
         if curr_character in knights:
-            if is_attack_selected and target:
+            if ability_selected and target:
                 if curr_character.attack(target):
                     turn_order.remove(target)
                     enemies.remove(target)
                 has_taken_action = True
-            if is_potion_selected:
-                curr_character.hp = min(curr_character.hp + potion_effect, curr_character.max_hp)
-                has_taken_action = True
+            # if is_potion_selected:
+            #     curr_character.hp = min(curr_character.hp + potion_effect, curr_character.max_hp)
+            #     has_taken_action = True
         else:
             enemy_target =  random.choice(knights)
             if curr_character.attack(enemy_target):
@@ -91,16 +91,20 @@ while is_running:
     if has_taken_action:
         turn_order.append(curr_character)
         curr_character = None
+        ability_selected = None
+        target = None
+        is_clicked = False
         has_taken_action = False
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             is_clicked = True
-        else:  
+        else:
             is_clicked = False
+        if event.type == pygame.MOUSEBUTTONUP:  
+            is_new_action = True
     
     if not knights:
         is_running = False
