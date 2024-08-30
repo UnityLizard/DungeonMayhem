@@ -1,4 +1,5 @@
 import random
+import math
 
 from general_info import *
 
@@ -9,15 +10,18 @@ class Character():
 		self.max_hp = max_hp
 		self.hp = max_hp
 		self.strength = strength
+		self.is_stunned = False
+		self.has_taunt = False
+		self.has_dodge = False
 		self.alive = True
 		self.position = (x, y)
 		self.image = pygame.image.load(f'img/characters/{self.name}.png')
 		self.rect = self.image.get_rect(bottomleft = self.position)
 
-	def attack(self, target):
+	def attack(self, target, ratio):
 		#deal damage to enemy
 		rand = random.randint(-5, 5)
-		damage = self.strength + rand
+		damage = math.floor(ratio * (self.strength + rand))
 		target.hp -= damage
 		#check if target has died
 		if target.hp < 1:
@@ -25,6 +29,27 @@ class Character():
 			target.alive = False
 			return True
 		return False
+
+	def heal(self, target, ratio):
+		#heal amount
+		rand = random.randint(0, 5)
+		heal_amount = math.ceil(2 * ratio * (self.strength + rand))
+		target.hp += heal_amount
+		target.hp = min(target.hp, target.max_hp)
+
+	def stun(self, target):
+		target.is_stunned = True
+
+	def taunt(self):
+		self.has_taunt = True
+
+	def dodge(self):
+		self.has_dodge = True
+
+	def pass_turn(self):
+		self.is_stunned = False
+		self.has_taunt = False
+		self.has_dodge = False
 
 	def draw(self):
 		screen.blit(self.image, self.rect)

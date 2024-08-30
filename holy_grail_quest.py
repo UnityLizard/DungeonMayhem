@@ -44,8 +44,6 @@ while is_running:
     if not curr_character:
         curr_character = turn_order.pop(0)
 
-    pos = pygame.mouse.get_pos()
-
     if isinstance(curr_character, Knight):
         if not bag.is_opened():
             curr_character.draw_abilities()
@@ -59,32 +57,56 @@ while is_running:
             bag.open()
 
         for ability in curr_character.abilities:
-            if ability.is_activated():
+            if ability.is_activated() and not ability.is_on_cd() and not bag.is_opened():
                 ability_selected = ability
 
         if ability_selected:
+            pos = pygame.mouse.get_pos()
             for enemy in enemies:
                 if enemy.rect.collidepoint(pos) and is_clicked:
                     target = enemy
 
-    #attack action
-    # action_cooldown += 1
-    if 12 >= action_wait_time:
-        if curr_character in knights:
+    # attack action
+    action_cooldown += 1
+    if action_cooldown >= action_wait_time:
+        died = []
+        if isinstance(curr_character, Knight):
             if ability_selected and target:
-                if curr_character.attack(target):
-                    turn_order.remove(target)
-                    enemies.remove(target)
+                if ability_selected.get_name() == "normal_attack":
+                    if curr_character.attack(target, 1):
+                        died.append(target)
+                elif ability_selected.get_name() == "multi_attack":
+                    for enemy in enemies:
+                        if curr_character.attack(enemy, 0.4):
+                            died.append(enemy)
+                elif ability_selected.get_name() == "stun":
+                    curr_character.stun(target)
+                    if curr_character.attack(target, 0.2):
+                        died.append(target)
+                elif ability_selected.get_name() == "heal":
+                    curr_character.heal(target, 1)
+                elif ability_selected.get_name() == "multi_heal":
+                    for knight in knights:
+                        curr_character.heal(knight, 0.4)
+                elif ability_selected.get_name() == "taunt":
+                    curr_character.taunt()
+                elif ability_selected.get_name() == "dodge":
+                    curr_character.dodge()
                 has_taken_action = True
-            # if is_potion_selected:
-            #     curr_character.hp = min(curr_character.hp + potion_effect, curr_character.max_hp)
-            #     has_taken_action = True
+                ability_selected.set_on_cd()
+                curr_character.pass_turn()
         else:
             enemy_target =  random.choice(knights)
-            if curr_character.attack(enemy_target):
-                turn_order.remove(enemy_target)
-                knights.remove(enemy_target)
+            if curr_character.attack(enemy_target, 1):
+                died.append(enemy_target)
             has_taken_action = True
+        
+        for character in died:
+            turn_order.remove(character)
+            if isinstance(character, Knight):
+                knights.remove(character)
+            else:
+                enemies.remove(character)
         action_cooldown = 0
         
 

@@ -1,15 +1,16 @@
-from knight import *
+from ability_type import *
 from enemy import *
+from knight import *
 
 
 abilities = {
-    "normal_attack" : (Ability("normal_attack", 0, 15, 15, img_def_attack, 380, 80)),
-    "multi_attack" : (Ability("multi_attack", 2, 15, 105, img_multi_attack, 380, 80)),
-    "stun" : (Ability("stun", 4, 515, 15, img_stun_attack, 380, 80)),
-    "heal" : (Ability("heal", 3, 15, 105, img_heal, 380, 80)),
-    "multi_heal" : (Ability("multi_heal", 5, 515, 15, img_multi_heal, 380, 80)),
-    "taunt" : (Ability("taunt", 3, 15, 105, img_taunt, 380, 80)),
-    "dodge" : (Ability("dodge", 4, 515, 15, img_dodge, 380, 80)),
+    "normal_attack" : (Ability("normal_attack", 0, AbilityType.OFFENCE, 15, 15, img_def_attack, 380, 80)),
+    "multi_attack" : (Ability("multi_attack", 2, AbilityType.OFFENCE, 15, 105, img_multi_attack, 380, 80)),
+    "stun" : (Ability("stun", 4, AbilityType.OFFENCE, 515, 15, img_stun_attack, 380, 80)),
+    "heal" : (Ability("heal", 3, AbilityType.DEFENCE, 15, 105, img_heal, 380, 80)),
+    "multi_heal" : (Ability("multi_heal", 5, AbilityType.DEFENCE, 515, 15, img_multi_heal, 380, 80)),
+    "taunt" : (Ability("taunt", 3, AbilityType.UTILITY, 15, 105, img_taunt, 380, 80)),
+    "dodge" : (Ability("dodge", 4, AbilityType.UTILITY, 515, 15, img_dodge, 380, 80)),
 }
 
 #here are the stats for all characters : first - HP, second - damage, third - abilities
